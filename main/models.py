@@ -16,7 +16,7 @@ class Data(models.Model):
     class Meta:
         abstract = True
 
-class Email(Data):
+class EmailData(Data):
     """
     Model for email data.
     """
@@ -25,7 +25,7 @@ class Email(Data):
     def __str__(self):
         return self.email
 
-class Password(Data):
+class PasswordData(Data):
     """
     Model for password data.
     """
@@ -34,7 +34,7 @@ class Password(Data):
     def __str__(self):
         return self.password
 
-class Phone(Data):
+class PhoneData(Data):
     """
     Model for phone data.
     """
