@@ -1,12 +1,15 @@
+"""
+Views for the main application.
+"""
+import logging
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import TemplateView, DetailView
-import logging
 
 def logout_view(request):
-    logging.info(f'{request.user.username} logged out')
+    logging.info('%s logged out', request.user.username)
     logout(request)
     return redirect('index')
 
@@ -46,5 +49,5 @@ class ProfilePage(DetailView, LoginRequiredMixin):
         """
         context = super().get_context_data(**kwargs)
         context['title'] = 'Profile'
-        logging.info(f'User {self.request.user.username} viewed profile of {self.object.username}')
+        logging.info('User %s viewed profile of %s', self.request.user.username, self.object.username)
         return context

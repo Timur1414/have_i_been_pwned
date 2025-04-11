@@ -23,7 +23,7 @@ class EmailData(Data):
     email = models.EmailField(unique=True)
 
     def __str__(self):
-        return self.email
+        return str(self.email)
 
 class PasswordData(Data):
     """
@@ -32,7 +32,7 @@ class PasswordData(Data):
     password = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.password
+        return str(self.password)
 
 class PhoneData(Data):
     """
@@ -41,4 +41,4 @@ class PhoneData(Data):
     phone = PhoneNumberField(unique=True, region='RU')
 
     def __str__(self):
-        return self.phone
+        return str(self.phone)

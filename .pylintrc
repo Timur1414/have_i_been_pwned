@@ -1,0 +1,44 @@
+[MASTER]
+load-plugins=pylint.extensions.no_self_use
+
+# Python code to analyze
+ignore=.venv,migrations
+
+# Set the Python version
+py-version=3.10
+
+[MESSAGES CONTROL]
+# Disable specific warnings/errors
+disable=
+    missing-docstring,
+    invalid-name,
+    too-few-public-methods,
+    no-member,
+    no-self-use,
+    too-many-arguments,
+    too-many-locals,
+    too-many-instance-attributes,
+    too-many-branches,
+    too-many-statements,
+    duplicate-code,
+    import-error,
+    unused-argument
+
+[FORMAT]
+# Maximum number of characters on a single line.
+max-line-length=120
+
+[DESIGN]
+# Maximum number of arguments for a function/method.
+max-args=10
+
+# Maximum number of attributes for a class.
+max-attributes=15
+
+[TYPECHECK]
+# Django models often have dynamic attributes like `objects`.
+generated-members=objects,DoesNotExist,MultipleObjectsReturned
+
+[LOGGING]
+# Allow logging without module-level configuration.
+logging-modules=logging
