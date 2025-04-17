@@ -7,7 +7,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, DetailView
-
 from main.models import EmailData, PhoneData
 
 logger = logging.getLogger('custom_django')
@@ -34,7 +33,7 @@ class IndexPage(TemplateView):
         return context
 
 
-class ProfilePage(DetailView, LoginRequiredMixin):
+class ProfilePage(LoginRequiredMixin, DetailView):
     """
     A view that renders the profile page.
     """

@@ -59,3 +59,17 @@ class ProfilePageTestCase(TestCase):
         self.assertIn('phone', self.response.context)
         phone = PhoneData.get_phone_by_user(self.user)
         self.assertEqual(self.response.context['phone'], phone)
+
+    def test_another_user_profile(self):
+        another_user = User.objects.get(username='test')
+        self.response = self.client.get(f'/profile/{another_user.id}/')
+        self.assertEqual(self.response.status_code, 200)
+        self.assertIn('is_same_user', self.response.context)
+        self.assertFalse(self.response.context['is_same_user'])
+        self.assertNotIn('email', self.response.context)
+        self.assertNotIn('phone', self.response.context)
+
+    def test_no_login(self):
+        self.client.logout()
+        self.response = self.client.get(f'/profile/{self.user.id}/')
+        self.assertEqual(self.response.status_code, 302)
