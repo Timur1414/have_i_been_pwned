@@ -8,8 +8,13 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, DetailView
 
+from main.models import EmailData, PhoneData
+
+logger = logging.getLogger('custom_django')
+
+
 def logout_view(request):
-    logging.info('%s logged out', request.user.username)
+    logger.info('%s logged out', request.user.username)
     logout(request)
     return redirect('index')
 
@@ -48,6 +53,11 @@ class ProfilePage(DetailView, LoginRequiredMixin):
         Adds context data to the template.
         """
         context = super().get_context_data(**kwargs)
+        is_same_user = self.request.user == self.object
+        context['is_same_user'] = is_same_user
         context['title'] = 'Profile'
-        logging.info('User %s viewed profile of %s', self.request.user.username, self.object.username)
+        logger.info('User %s viewed profile of %s', self.request.user.username, self.object.username)
+        if is_same_user:
+            context['email'] = EmailData.get_email_by_user(self.object)
+            context['phone'] = PhoneData.get_phone_by_user(self.object)
         return context
