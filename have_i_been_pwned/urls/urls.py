@@ -1,24 +1,10 @@
 """
-URL configuration for have_i_been_pwned project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+URL configuration for the Have I Been Pwned project.
 """
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from main import views
-from main import routers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,11 +28,4 @@ urlpatterns = [
          ),
     path('registration/', include('django_registration.backends.activation.urls')),
     path('profile/<int:id>/', views.ProfilePage.as_view(), name='profile'),
-
-    path('api/auth/', include('rest_framework.urls')),
-    path('api/v0/users/', routers.UsersViewSet.as_view()),
-    path('api/v0/accounts/', routers.AccountsViewSet.as_view()),
-    path('api/v0/email_data/', routers.EmailDataViewSet.as_view()),
-    path('api/v0/password_data/', routers.PasswordDataViewSet.as_view()),
-    path('api/v0/phone_data/', routers.PhoneDataViewSet.as_view()),
 ]
