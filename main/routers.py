@@ -34,7 +34,7 @@ class AccountsViewSet(APIView):
         """
         Get all accounts.
         """
-        accounts = Account.objects.all()
+        accounts = Account.get()
         serializer = AccountSerializer(accounts, many=True)
         data = {
             'count': len(accounts),
@@ -48,7 +48,7 @@ class EmailDataViewSet(APIView):
     ViewSet for EmailData model.
     """
     def get(self, request, format=None):
-        email_data = EmailData.objects.all()
+        email_data = EmailData.get()
         serializer = EmailDataSerializer(email_data, many=True)
         data = {
             'count': len(email_data),
@@ -62,7 +62,7 @@ class PasswordDataViewSet(APIView):
     ViewSet for PasswordData model.
     """
     def get(self, request, format=None):
-        password_data = PasswordData.objects.all()
+        password_data = PasswordData.get()
         serializer = PasswordDataSerializer(password_data, many=True)
         data = {
             'count': len(password_data),
@@ -76,7 +76,7 @@ class PhoneDataViewSet(APIView):
     ViewSet for PhoneData model.
     """
     def get(self, request, format=None):
-        phone_data = PhoneData.objects.all()
+        phone_data = PhoneData.get()
         serializer = PhoneDataSerializer(phone_data, many=True)
         data = {
             'count': len(phone_data),

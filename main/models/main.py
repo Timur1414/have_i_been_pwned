@@ -23,6 +23,14 @@ class Account(Data):
         return str(self.url)
 
     @staticmethod
+    def get(offset=0, limit=1000):
+        """
+        Get account data.
+        """
+        logger.debug('Getting account data with offset: %s and limit: %s', offset, limit)
+        return Account.objects.get(offset=offset, limit=limit)
+
+    @staticmethod
     def get_account_by_user(user: User) -> Optional[Account]:
         """
         Get account data by user.
@@ -38,6 +46,14 @@ class EmailData(Data):
 
     def __str__(self):
         return str(self.email)
+
+    @staticmethod
+    def get(offset=0, limit=1000):
+        """
+        Get email data.
+        """
+        logger.debug('Getting email data with offset: %s and limit: %s', offset, limit)
+        return EmailData.objects.get(offset=offset, limit=limit)
 
     @staticmethod
     def get_email_by_user(user: User) -> Optional[EmailData]:
@@ -57,6 +73,14 @@ class PasswordData(Data):
         return str(self.password)
 
     @staticmethod
+    def get(offset=0, limit=1000):
+        """
+        Get password data.
+        """
+        logger.debug('Getting password data with offset: %s and limit: %s', offset, limit)
+        return PasswordData.objects.get(offset=offset, limit=limit)
+
+    @staticmethod
     def get_password_by_user(user: User) -> Optional[PasswordData]:
         """
         Get password data by user.
@@ -72,6 +96,14 @@ class PhoneData(Data):
 
     def __str__(self):
         return str(self.phone)
+    
+    @staticmethod
+    def get(offset=0, limit=1000):
+        """
+        Get phone data.
+        """
+        logger.debug('Getting phone data with offset: %s and limit: %s', offset, limit)
+        return PhoneData.objects.get(offset=offset, limit=limit)
 
     @staticmethod
     def get_phone_by_user(user: User) -> Optional[PhoneData]:
