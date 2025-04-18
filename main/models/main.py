@@ -11,6 +11,25 @@ from main.models.abstract import Data
 
 logger = logging.getLogger('models')
 
+class Account(Data):
+    """
+    Model for account data.
+    """
+    url = models.URLField(max_length=255)
+    login = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)  # ToDo: encrypt password
+
+    def __str__(self):
+        return str(self.url)
+
+    @staticmethod
+    def get_account_by_user(user: User) -> Optional[Account]:
+        """
+        Get account data by user.
+        """
+        logger.debug('Getting account data for user: %s', user.username)
+        return Account.objects.filter(user=user).first()
+
 class EmailData(Data):
     """
     Model for email data.
@@ -32,7 +51,7 @@ class PasswordData(Data):
     """
     Model for password data.
     """
-    password = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)  # ToDo: encrypt password
 
     def __str__(self):
         return str(self.password)

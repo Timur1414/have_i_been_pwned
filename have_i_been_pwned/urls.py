@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from main import views
+from main import routers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,4 +42,11 @@ urlpatterns = [
          ),
     path('registration/', include('django_registration.backends.activation.urls')),
     path('profile/<int:id>/', views.ProfilePage.as_view(), name='profile'),
+
+    path('api/auth/', include('rest_framework.urls')),
+    path('api/v0/users/', routers.UsersViewSet.as_view()),
+    path('api/v0/accounts/', routers.AccountsViewSet.as_view()),
+    path('api/v0/email_data/', routers.EmailDataViewSet.as_view()),
+    path('api/v0/password_data/', routers.PasswordDataViewSet.as_view()),
+    path('api/v0/phone_data/', routers.PhoneDataViewSet.as_view()),
 ]
