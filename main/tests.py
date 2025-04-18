@@ -73,3 +73,5 @@ class ProfilePageTestCase(TestCase):
         self.client.logout()
         self.response = self.client.get(f'/profile/{self.user.id}/')
         self.assertEqual(self.response.status_code, 302)
+
+# ToDo: add API tests
