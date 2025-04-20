@@ -28,7 +28,7 @@ urlpatterns = [
          ),
 
     path('registration/', include('django_registration.backends.activation.urls')),
-    path('profile/<int:id>/', views.ProfilePage.as_view(), name='profile'),
+    path('profile/', views.ProfilePage.as_view(), name='profile'),
 
     path('cipher/', views.CipherPage.as_view(), name='cipher'),
 ]

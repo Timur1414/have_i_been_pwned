@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ user.username }}</h1>
+    <h1>Hello, {{ user.username }}</h1>
     <p>My data:</p>
     <p>Emails: </p>
     {% for item in emails %}
@@ -30,4 +30,5 @@
     {% empty %}
         <p>Add account</p>
     {% endfor %}
+    <a>Add data</a>
 {% endblock %}

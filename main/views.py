@@ -47,7 +47,7 @@ class ProfilePage(LoginRequiredMixin, DetailView):
         """
         Returns the user object for the profile page.
         """
-        user = User.objects.get(id=self.kwargs['id'])
+        user = self.request.user
         return user
 
     def get_context_data(self, **kwargs):
@@ -55,15 +55,12 @@ class ProfilePage(LoginRequiredMixin, DetailView):
         Adds context data to the template.
         """
         context = super().get_context_data(**kwargs)
-        is_same_user = self.request.user == self.object
-        context['is_same_user'] = is_same_user
         context['title'] = 'Profile'
-        logger.info('User %s viewed profile of %s', self.request.user.username, self.object.username)
-        if is_same_user:
-            context['passwords'] = PasswordData.get_passwords_by_user(self.object)
-            context['emails'] = EmailData.get_emails_by_user(self.object)
-            context['phones'] = PhoneData.get_phones_by_user(self.object)
-            context['accounts'] = Account.get_accounts_by_user(self.object)
+        logger.info('User %s viewed profile', self.object.username)
+        context['passwords'] = PasswordData.get_passwords_by_user(self.object)
+        context['emails'] = EmailData.get_emails_by_user(self.object)
+        context['phones'] = PhoneData.get_phones_by_user(self.object)
+        context['accounts'] = Account.get_accounts_by_user(self.object)
         return context
 
 
