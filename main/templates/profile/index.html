@@ -1,34 +1,87 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hello, {{ user.username }}</h1>
-    <p>My data:</p>
-    <p>Emails: </p>
-    {% for item in emails %}
-        {% include "profile/email_card.html" %}
-    {% empty %}
-        <p>Add email</p>
-    {% endfor %}
-    <br>
-    <p>Passwords:</p>
-    {% for item in passwords %}
-        {% include "profile/password_card.html" %}
-    {% empty %}
-        <p>Add password</p>
-    {% endfor %}
-    <br>
-    <p>Phones:</p>
-    {% for item in phones %}
-        {% include "profile/phone_card.html" %}
-    {% empty %}
-        <p>Add phone</p>
-    {% endfor %}
-    <br>
-    <p>Accounts:</p>
-    {% for item in accounts %}
-        {% include "profile/account_card.html" %}
-    {% empty %}
-        <p>Add account</p>
-    {% endfor %}
+    <h1 class="text-center">Hello, <span class="text-success">{{ user.username }}</span></h1>
+    <p class="text-primary fs-2">My data:</p>
+
+    <div class="accordion p-3" id="accordion">
+        <div class="accordion-item bg-black border border-3 border-info text-white">
+            <h2 class="accordion-header" id="heading1">
+                <button class="accordion-button collapsed bg-black text-white fw-bold" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#accordion_control1" aria-expanded="false"
+                        aria-controls="accordion_control1">
+                    Emails
+                </button>
+            </h2>
+            <div id="accordion_control1" class="accordion-collapse collapse"
+                 aria-labelledby="heading1">
+                <div class="accordion-body">
+                    {% for item in emails %}
+                        {% include "profile/email_card.html" %}
+                    {% empty %}
+                        <p>Add email</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item bg-black border border-3 border-info text-white">
+            <h2 class="accordion-header" id="heading2">
+                <button class="accordion-button collapsed bg-black text-white fw-bold" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#accordion_control2" aria-expanded="false"
+                        aria-controls="accordion_control2">
+                    Passwords
+                </button>
+            </h2>
+            <div id="accordion_control2" class="accordion-collapse collapse"
+                 aria-labelledby="heading2">
+                <div class="accordion-body">
+                    {% for item in passwords %}
+                        {% include "profile/password_card.html" %}
+                    {% empty %}
+                        <p>Add password</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item bg-black border border-3 border-info text-white">
+            <h2 class="accordion-header" id="heading3">
+                <button class="accordion-button collapsed bg-black text-white fw-bold" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#accordion_control3" aria-expanded="false"
+                        aria-controls="accordion_control3">
+                    Phones
+                </button>
+            </h2>
+            <div id="accordion_control3" class="accordion-collapse collapse"
+                 aria-labelledby="heading3">
+                <div class="accordion-body">
+                    {% for item in phones %}
+                        {% include "profile/phone_card.html" %}
+                    {% empty %}
+                        <p>Add phone</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item bg-black border border-3 border-info text-white">
+            <h2 class="accordion-header" id="heading4">
+                <button class="accordion-button collapsed bg-black text-white fw-bold" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#accordion_control4" aria-expanded="false"
+                        aria-controls="accordion_control4">
+                    Accounts
+                </button>
+            </h2>
+            <div id="accordion_control4" class="accordion-collapse collapse"
+                 aria-labelledby="heading4">
+                <div class="accordion-body">
+                    {% for item in accounts %}
+                        {% include "profile/account_card.html" %}
+                    {% empty %}
+                        <p>Add account</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
     <a>Add data</a>
 {% endblock %}

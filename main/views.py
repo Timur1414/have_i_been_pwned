@@ -4,11 +4,8 @@ Views for the main application.
 import logging
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
 from django.views.generic import TemplateView, DetailView, FormView
-
 from main.forms import CipherForm
 from main.models import EmailData, PhoneData, Account, PasswordData
 
