@@ -71,10 +71,6 @@ class CipherPage(LoginRequiredMixin, FormView):
     """
     template_name = 'cipher/index.html'
     form_class = CipherForm
-    success_url = reverse_lazy('cipher')
-
-    def form_valid(self, form):
-        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         """

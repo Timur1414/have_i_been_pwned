@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if form.errors %}
+        <ul>
+            {% for field, errors in form.errors.items %}
+                <li>
+                    {% for error in errors %}
+                        {{ error }}
+                    {% endfor %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {% if action == 'encrypt' %}
+            <h1>Encrypted data</h1>
+        {% else %}
+            <h1>Decrypted data</h1>
+        {% endif %}
+        <div>
+            <p>Data:</p>
+            <p>{{ result }}</p>
+        </div>
+    {% endif %}
+{% endblock %}
