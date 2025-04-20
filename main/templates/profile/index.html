@@ -3,4 +3,31 @@
 {% block content %}
     <h1>{{ user.username }}</h1>
     <p>My data:</p>
+    <p>Emails: </p>
+    {% for item in emails %}
+        {% include "profile/email_card.html" %}
+    {% empty %}
+        <p>Add email</p>
+    {% endfor %}
+    <br>
+    <p>Passwords:</p>
+    {% for item in passwords %}
+        {% include "profile/password_card.html" %}
+    {% empty %}
+        <p>Add password</p>
+    {% endfor %}
+    <br>
+    <p>Phones:</p>
+    {% for item in phones %}
+        {% include "profile/phone_card.html" %}
+    {% empty %}
+        <p>Add phone</p>
+    {% endfor %}
+    <br>
+    <p>Accounts:</p>
+    {% for item in accounts %}
+        {% include "profile/account_card.html" %}
+    {% empty %}
+        <p>Add account</p>
+    {% endfor %}
 {% endblock %}

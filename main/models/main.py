@@ -6,6 +6,7 @@ import logging
 from typing import Optional
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import QuerySet
 from phonenumber_field.modelfields import PhoneNumberField
 from main.models.abstract import Data
 
@@ -19,11 +20,11 @@ class Account(Data):
     login = models.CharField(max_length=255)
     password = models.CharField(max_length=255)  # ToDo: encrypt password
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.url)
 
     @staticmethod
-    def get(offset=0, limit=1000):
+    def get(offset=0, limit=1000) -> Optional[Account]:
         """
         Get account data.
         """
@@ -31,12 +32,12 @@ class Account(Data):
         return Account.objects.get(offset=offset, limit=limit)
 
     @staticmethod
-    def get_account_by_user(user: User) -> Optional[Account]:
+    def get_accounts_by_user(user: User) -> QuerySet:
         """
-        Get account data by user.
+        Get accounts data by user.
         """
-        logger.debug('Getting account data for user: %s', user.username)
-        return Account.objects.filter(user=user).first()
+        logger.debug('Getting accounts data for user: %s', user.username)
+        return Account.objects.filter(user=user).all()
 
 class EmailData(Data):
     """
@@ -44,11 +45,11 @@ class EmailData(Data):
     """
     email = models.EmailField(unique=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.email)
 
     @staticmethod
-    def get(offset=0, limit=1000):
+    def get(offset=0, limit=1000) -> Optional[EmailData]:
         """
         Get email data.
         """
@@ -56,12 +57,12 @@ class EmailData(Data):
         return EmailData.objects.get(offset=offset, limit=limit)
 
     @staticmethod
-    def get_email_by_user(user: User) -> Optional[EmailData]:
+    def get_emails_by_user(user: User) -> QuerySet:
         """
-        Get email data by user.
+        Get emails data by user.
         """
-        logger.debug('Getting email data for user: %s', user.username)
-        return EmailData.objects.filter(user=user).first()
+        logger.debug('Getting emails data for user: %s', user.username)
+        return EmailData.objects.filter(user=user).all()
 
 class PasswordData(Data):
     """
@@ -69,11 +70,11 @@ class PasswordData(Data):
     """
     password = models.CharField(max_length=255)  # ToDo: encrypt password
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.password)
 
     @staticmethod
-    def get(offset=0, limit=1000):
+    def get(offset=0, limit=1000) -> Optional[PasswordData]:
         """
         Get password data.
         """
@@ -81,12 +82,12 @@ class PasswordData(Data):
         return PasswordData.objects.get(offset=offset, limit=limit)
 
     @staticmethod
-    def get_password_by_user(user: User) -> Optional[PasswordData]:
+    def get_passwords_by_user(user: User) -> QuerySet:
         """
-        Get password data by user.
+        Get passwords data by user.
         """
-        logger.debug('Getting password data for user: %s', user.username)
-        return PasswordData.objects.filter(user=user).first()
+        logger.debug('Getting passwords data for user: %s', user.username)
+        return PasswordData.objects.filter(user=user).all()
 
 class PhoneData(Data):
     """
@@ -94,11 +95,11 @@ class PhoneData(Data):
     """
     phone = PhoneNumberField(unique=True, region='RU')
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.phone)
     
     @staticmethod
-    def get(offset=0, limit=1000):
+    def get(offset=0, limit=1000) -> Optional[PhoneData]:
         """
         Get phone data.
         """
@@ -106,9 +107,9 @@ class PhoneData(Data):
         return PhoneData.objects.get(offset=offset, limit=limit)
 
     @staticmethod
-    def get_phone_by_user(user: User) -> Optional[PhoneData]:
+    def get_phones_by_user(user: User) -> QuerySet:
         """
-        Get phone data by user.
+        Get phones data by user.
         """
-        logger.debug('Getting phone data for user: %s', user.username)
-        return PhoneData.objects.filter(user=user).first()
+        logger.debug('Getting phones data for user: %s', user.username)
+        return PhoneData.objects.filter(user=user).all()

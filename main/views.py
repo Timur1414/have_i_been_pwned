@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, DetailView, FormView
 
 from main.forms import CipherForm
-from main.models import EmailData, PhoneData
+from main.models import EmailData, PhoneData, Account, PasswordData
 
 logger = logging.getLogger('custom_django')
 
@@ -60,8 +60,10 @@ class ProfilePage(LoginRequiredMixin, DetailView):
         context['title'] = 'Profile'
         logger.info('User %s viewed profile of %s', self.request.user.username, self.object.username)
         if is_same_user:
-            context['email'] = EmailData.get_email_by_user(self.object)
-            context['phone'] = PhoneData.get_phone_by_user(self.object)
+            context['passwords'] = PasswordData.get_passwords_by_user(self.object)
+            context['emails'] = EmailData.get_emails_by_user(self.object)
+            context['phones'] = PhoneData.get_phones_by_user(self.object)
+            context['accounts'] = Account.get_accounts_by_user(self.object)
         return context
 
 

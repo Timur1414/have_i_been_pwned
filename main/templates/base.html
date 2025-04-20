@@ -21,7 +21,7 @@
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{% url 'profile' id=user.id %}">Profile</a>
+                            <a class="nav-link text-white" href="{% url 'profile' id=user.id %}"><strong>Profile</strong></a>
                         </li>
                         <li>
                             <a class="nav-link text-white" href="{% url 'cipher' %}">Cipher</a>
