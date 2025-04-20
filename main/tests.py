@@ -4,7 +4,6 @@ Test cases for the main app views.
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import Client
-
 from main.models import EmailData, PhoneData
 
 
@@ -53,12 +52,12 @@ class ProfilePageTestCase(TestCase):
         self.assertTrue(self.response.context['is_same_user'])
         self.assertIn('title', self.response.context)
         self.assertEqual(self.response.context['title'], 'Profile')
-        self.assertIn('email', self.response.context)
-        email = EmailData.get_email_by_user(self.user)
-        self.assertEqual(self.response.context['email'], email)
-        self.assertIn('phone', self.response.context)
-        phone = PhoneData.get_phone_by_user(self.user)
-        self.assertEqual(self.response.context['phone'], phone)
+        self.assertIn('emails', self.response.context)
+        email = EmailData.get_emails_by_user(self.user)
+        self.assertQuerySetEqual(self.response.context['emails'], email)
+        self.assertIn('phones', self.response.context)
+        phone = PhoneData.get_phones_by_user(self.user)
+        self.assertQuerySetEqual(self.response.context['phones'], phone)
 
     def test_another_user_profile(self):
         another_user = User.objects.get(username='test')
@@ -66,8 +65,8 @@ class ProfilePageTestCase(TestCase):
         self.assertEqual(self.response.status_code, 200)
         self.assertIn('is_same_user', self.response.context)
         self.assertFalse(self.response.context['is_same_user'])
-        self.assertNotIn('email', self.response.context)
-        self.assertNotIn('phone', self.response.context)
+        self.assertNotIn('emails', self.response.context)
+        self.assertNotIn('phones', self.response.context)
 
     def test_no_login(self):
         self.client.logout()
