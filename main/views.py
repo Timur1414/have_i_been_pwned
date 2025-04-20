@@ -6,7 +6,10 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
-from django.views.generic import TemplateView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, DetailView, FormView
+
+from main.forms import CipherForm
 from main.models import EmailData, PhoneData
 
 logger = logging.getLogger('custom_django')
@@ -59,4 +62,25 @@ class ProfilePage(LoginRequiredMixin, DetailView):
         if is_same_user:
             context['email'] = EmailData.get_email_by_user(self.object)
             context['phone'] = PhoneData.get_phone_by_user(self.object)
+        return context
+
+
+class CipherPage(LoginRequiredMixin, FormView):
+    """
+    A view that renders the cipher page.
+    """
+    template_name = 'cipher/index.html'
+    form_class = CipherForm
+    success_url = reverse_lazy('cipher')
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds context data to the template.
+        """
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Cipher'
+        logger.info('User %s viewed cipher page', self.request.user.username)
         return context
