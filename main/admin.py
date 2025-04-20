@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from main.models import EmailData, PasswordData, PhoneData
+from main.models import EmailData, PasswordData, PhoneData, Account
 
 
 @admin.register(EmailData)
@@ -34,3 +34,14 @@ class PhoneDataModelAdmin(admin.ModelAdmin):
     list_filter = ('pwned',)
     ordering = ('phone',)
     list_display_links = ('phone', 'pwned')
+
+@admin.register(Account)
+class AccountModelAdmin(admin.ModelAdmin):
+    """
+    Admin interface for Account model.
+    """
+    list_display = ('user', 'url',)
+    search_fields = ('url',)
+    list_filter = ('pwned',)
+    ordering = ('user',)
+    list_display_links = ('user', 'url',)
