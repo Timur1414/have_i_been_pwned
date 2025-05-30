@@ -2,6 +2,7 @@ import pickle
 import socket
 from ciphers_algorithms.aes import AES
 from ciphers_algorithms.rsa import RSA
+from have_i_been_pwned.settings import server_host, server_port, buf_size
 
 
 class Server:
@@ -80,17 +81,16 @@ class Server:
 
 
 def main():
-    server = Server()
+    server = Server(host=server_host, port=server_port, buf_size=buf_size)
     server.generate_keys()
     end = False
     while not end:
         server.accept()
         try:
-            # action = server.get_message()
             data = server.get_message()
             message = f'text: {data}'
             server.send_message(message)
-        except:
+        except ValueError:
             server.send_message('\0')
         server.close_connection()
     server.close_server()

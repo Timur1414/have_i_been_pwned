@@ -165,3 +165,8 @@ LOGGING = {
         },
     },
 }
+
+# Cipher client-server settings
+server_host = os.environ.get('CIPHER_SERVER_HOST', 'Define me!')
+server_port = int(os.environ.get('CIPHER_SERVER_PORT', 'Define me!'))
+buf_size = 1024
