@@ -87,7 +87,7 @@ def main():
         server.accept()
         # action = server.get_message()
         data = server.get_message()
-        message = f'{1} {data}'
+        message = f'text: {data}'
         server.send_message(message)
         server.close_connection()
     server.close_server()
