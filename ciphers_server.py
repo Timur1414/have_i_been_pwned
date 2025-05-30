@@ -85,10 +85,13 @@ def main():
     end = False
     while not end:
         server.accept()
-        # action = server.get_message()
-        data = server.get_message()
-        message = f'text: {data}'
-        server.send_message(message)
+        try:
+            # action = server.get_message()
+            data = server.get_message()
+            message = f'text: {data}'
+            server.send_message(message)
+        except:
+            server.send_message('\0')
         server.close_connection()
     server.close_server()
 

@@ -10,20 +10,23 @@ from main.forms import CipherForm
 
 logger = logging.getLogger('custom_django')
 
-def send_message_to_server(data: str, action: str) -> str:
+def send_message_to_server(data: str, action: str) -> str | None:
     # server_host = os.environ.get('CIPHER_SERVER_HOST', 'Define me!')
     # server_port = int(os.environ.get('CIPHER_SERVER_PORT', 'Define me!'))
     server_host = '127.0.0.1'
     server_port = 8888
     buf_size = 1024
-    client = Client(host=server_host, port=server_port, buf_size=buf_size)
-    client.connect()
-    client.generate_keys()
-    client.send_message('100')
-    # client.send_message('100')
-    result = client.get_message()
-    client.close()
-    return result
+    try:
+        client = Client(host=server_host, port=server_port, buf_size=buf_size)
+        client.connect()
+        client.generate_keys()
+        client.send_message(f'{action} {data}')
+        # client.send_message('100')
+        result = client.get_message()
+        client.close()
+        return result
+    except:
+        return ''
 
 
 def cipher(request):
@@ -39,7 +42,10 @@ def cipher(request):
         action = form.cleaned_data['action']
         data = form.cleaned_data['data']
         context['action'] = action
-        result = send_message_to_server(data, action)
+        # result = send_message_to_server(data, action)
+        result = ''
+        while result == '':
+            result = send_message_to_server(data, action)
         context['result'] = result
     else:
         logger.warning('User %s send wrong data to cipher page', request.user.username)

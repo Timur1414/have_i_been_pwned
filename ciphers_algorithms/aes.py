@@ -260,15 +260,15 @@ class AES:
         return decrypted_data
 
     @staticmethod
-    def generate_key(length: int = 16) -> str:
+    def generate_key(length: int = 4) -> str:
         key = []
         for _ in range(min(length, 16)):
-            key.append(randint(0, 127))
+            key.append(randint(32, 127))
         return ''.join([chr(i) for i in key])
 
     @staticmethod
-    def generate_initialization_vector(length: int = 16) -> str:
+    def generate_initialization_vector(length: int = 4) -> str:
         initialization_vector = []
         for _ in range(min(length, 16)):
-            initialization_vector.append(randint(0, 127))
+            initialization_vector.append(randint(32, 127))
         return ''.join([chr(i) for i in initialization_vector])
