@@ -5,8 +5,10 @@ import logging
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.views.generic import TemplateView, DetailView, FormView
-from main.forms import CipherForm
+from django.views.generic import TemplateView, DetailView, FormView, CreateView
+from rest_framework.reverse import reverse_lazy
+
+from main.forms import CipherForm, EmailCreateForm, PasswordCreateForm, PhoneCreateForm, AccountCreateForm
 from main.models import EmailData, PhoneData, Account, PasswordData
 
 logger = logging.getLogger('custom_django')
@@ -75,4 +77,141 @@ class CipherPage(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Cipher'
         logger.info('User %s viewed cipher page', self.request.user.username)
+        return context
+
+
+class EmailCreatePage(LoginRequiredMixin, CreateView):
+    """
+    A view that renders the email creation page.
+    """
+    template_name = 'data/creation/email.html'
+    model = EmailData
+    form_class = EmailCreateForm
+    success_url = reverse_lazy('profile')
+
+    def get_initial(self):
+        """
+        Sets the initial data for the form.
+        """
+        initial = super().get_initial()
+        initial['user'] = self.request.user
+        initial['pwned'] = False
+        return initial
+
+    def form_valid(self, form):
+        """
+        Handles the form submission.
+        """
+        if form.instance.user != self.request.user:
+            form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds context data to the template.
+        """
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Create Email'
+        return context
+
+class PasswordCreatePage(LoginRequiredMixin, CreateView):
+    """
+    A view that renders the password creation page.
+    """
+    template_name = 'data/creation/password.html'
+    model = PasswordData
+    form_class = PasswordCreateForm
+    success_url = reverse_lazy('profile')
+
+    def get_initial(self):
+        """
+        Sets the initial data for the form.
+        """
+        initial = super().get_initial()
+        initial['user'] = self.request.user
+        initial['pwned'] = False
+        return initial
+
+    def form_valid(self, form):
+        """
+        Handles the form submission.
+        """
+        if form.instance.user != self.request.user:
+            form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds context data to the template.
+        """
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Create Password'
+        return context
+
+class PhoneCreatePage(LoginRequiredMixin, CreateView):
+    """
+    A view that renders the phone number creation page.
+    """
+    template_name = 'data/creation/phone.html'
+    model = PhoneData
+    form_class = PhoneCreateForm
+    success_url = reverse_lazy('profile')
+
+    def get_initial(self):
+        """
+        Sets the initial data for the form.
+        """
+        initial = super().get_initial()
+        initial['user'] = self.request.user
+        initial['pwned'] = False
+        return initial
+
+    def form_valid(self, form):
+        """
+        Handles the form submission.
+        """
+        if form.instance.user != self.request.user:
+            form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds context data to the template.
+        """
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Create Phone Number'
+        return context
+
+class AccountCreatePage(LoginRequiredMixin, CreateView):
+    """
+    A view that renders the account creation page.
+    """
+    template_name = 'data/creation/account.html'
+    model = Account
+    form_class = AccountCreateForm
+    success_url = reverse_lazy('profile')
+
+    def get_initial(self):
+        """
+        Sets the initial data for the form.
+        """
+        initial = super().get_initial()
+        initial['user'] = self.request.user
+        initial['pwned'] = False
+        return initial
+
+    def form_valid(self, form):
+        """
+        Handles the form submission.
+        """
+        if form.instance.user != self.request.user:
+            form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds context data to the template.
+        """
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Create Account'
         return context

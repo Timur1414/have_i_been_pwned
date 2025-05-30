@@ -30,5 +30,10 @@ urlpatterns = [
     path('registration/', include('django_registration.backends.activation.urls')),
     path('profile/', views.ProfilePage.as_view(), name='profile'),
 
+    path('create/email/', views.EmailCreatePage.as_view(), name='create_email'),
+    path('create/password/', views.PasswordCreatePage.as_view(), name='create_password'),
+    path('create/phone', views.PhoneCreatePage.as_view(), name='create_phone'),
+    path('create/account', views.AccountCreatePage.as_view(), name='create_account'),
+
     path('cipher/', views.CipherPage.as_view(), name='cipher'),
 ]

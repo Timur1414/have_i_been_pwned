@@ -19,7 +19,7 @@
                     {% for item in emails %}
                         {% include "profile/email_card.html" %}
                     {% empty %}
-                        <p>Add email</p>
+                        <a href="{% url 'create_email' %}">Add email</a>
                     {% endfor %}
                 </div>
             </div>
@@ -38,7 +38,7 @@
                     {% for item in passwords %}
                         {% include "profile/password_card.html" %}
                     {% empty %}
-                        <p>Add password</p>
+                        <a href="{% url 'create_password' %}">Add password</a>
                     {% endfor %}
                 </div>
             </div>
