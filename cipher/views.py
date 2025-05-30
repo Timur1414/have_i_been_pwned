@@ -10,7 +10,7 @@ from main.forms import CipherForm
 
 logger = logging.getLogger('custom_django')
 
-def send_message_to_server(data: str, action: str) -> str | None:
+def send_message_to_server(data: str, action: str) -> str:
     try:
         client = Client(host=server_host, port=server_port, buf_size=buf_size)
         client.connect()
@@ -19,9 +19,18 @@ def send_message_to_server(data: str, action: str) -> str | None:
         result = client.get_message()
         client.close()
         return result
-    except ValueError:
+    except (ValueError, IndexError):
         return ''
 
+def get_result_from_cipher_server(data: str, action: str) -> str:
+    result = ''
+    counter = 0
+    while result == '':
+        result = send_message_to_server(data, action)
+        counter += 1
+        if counter > 10:
+            return 'Server is not responding'
+    return result
 
 def cipher(request):
     if request.method == 'GET':
@@ -36,9 +45,7 @@ def cipher(request):
         action = form.cleaned_data['action']
         data = form.cleaned_data['data']
         context['action'] = action
-        result = ''
-        while result == '':
-            result = send_message_to_server(data, action)
+        result = get_result_from_cipher_server(data, action)
         context['result'] = result
     else:
         logger.warning('User %s send wrong data to cipher page', request.user.username)
