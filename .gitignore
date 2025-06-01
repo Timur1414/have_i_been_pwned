@@ -327,3 +327,6 @@ $RECYCLE.BIN/
 /.idea/vcs.xml
 /.idea/dataSources.xml
 /.idea/encodings.xml
+/celerybeat-schedule.bak
+/celerybeat-schedule.dat
+/celerybeat-schedule.dir
