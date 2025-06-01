@@ -14,39 +14,35 @@ from main.models import CipherResults
 
 logger = logging.getLogger('custom_django')
 
-def send_message_to_server(data: str, key: str, action: str, client: Client) -> str:
+def send_message_to_server(data: str, key: str, action: str) -> str:
     try:
-        client.send_message(f'{action} {key} {data}')
+        client = Client(host=server_host, port=server_port, buf_size=buf_size)
+        client.generate_keys()
+        client.connect()
+        client.send_message(f'{action} {data} {key}')
         result = client.get_message()
-        return result
+        client.close()
     except (ValueError, IndexError, EOFError, ConnectionRefusedError):
-        return ''
+        result = ''
+    return result
 
 def save_result(result: str, request: WSGIRequest):
     now = datetime.datetime.now()
     file_name = f'{request.user.username}{now}'
     file_name = hashlib.sha256(file_name.encode()).hexdigest()
-    file_path = f'{MEDIA_ROOT}\\{file_name}.txt'
+    file_path = f'{MEDIA_ROOT}/{file_name}.txt'
     with open(file_path, 'w') as file:
         file.write(result)
     result_object = CipherResults(file=file_path)
     result_object.save()
-    # os.remove('cipher_result.txt')
 
 def get_result_from_cipher_server(data: str, key: str, action: str) -> str:
-    client = Client(host=server_host, port=server_port, buf_size=buf_size)
-    client.generate_keys()
-    client.connect()
     result = ''
-    counter = 0
-    while result == '':
-        result = send_message_to_server(data, key, action, client)
+    counter = 1
+    while (result == '' or result == '\0') and counter <= 10:
         counter += 1
-        if counter > 10:
-            client.close()
-            return 'Server is not responding'
-    client.close()
-    return result
+        result = send_message_to_server(data, key, action)
+    return result if result else 'Server is not available, try later.'
 
 def cipher(request):
     if request.method == 'GET':

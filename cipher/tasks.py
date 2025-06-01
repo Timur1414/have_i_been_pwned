@@ -11,5 +11,5 @@ def delete_files():
     objects = CipherResults.objects.all()
     now = timezone.now()
     for obj in objects:
-        if (now - obj.date_created).seconds > 1:
+        if (now - obj.date_created).days > 1:
             obj.delete()

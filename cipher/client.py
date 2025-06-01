@@ -1,5 +1,7 @@
 import pickle
 import socket
+from time import sleep
+
 from ciphers_algorithms.aes import AES
 from ciphers_algorithms.rsa import RSA
 
@@ -19,10 +21,11 @@ class Client:
 
     def connect(self):
         self.client.connect((self.host, self.port))
+        self.__handshake()
 
     def __handshake(self):
         serialized_open_key = pickle.dumps(self.open_key)
-        self.client.send(serialized_open_key)
+        self.client.send((serialized_open_key))
 
         server_open_key = self.client.recv(self.buf_size)
         self.server_open_key = pickle.loads(server_open_key)
@@ -40,17 +43,17 @@ class Client:
         return number_initialize_vector
 
     def send_message(self, message: str):
-        self.__handshake()
         number_key = self.__enter_key()
         number_initialize_vector = self.__enter_initialize_vector()
         encrypted_key = str(RSA.encrypt(number_key, self.server_open_key))
         self.client.send(encrypted_key.encode('utf-8'))
+        sleep(1)
         encrypted_initialize_vector = str(RSA.encrypt(number_initialize_vector, self.server_open_key))
         self.client.send(encrypted_initialize_vector.encode('utf-8'))
-
-        # message = input('Enter message: ')
+        sleep(1)
         encrypted_message = AES.encrypt_message(message, self.key, self.initialize_vector)
         self.client.send(encrypted_message.encode('utf-8'))
+        sleep(1)
 
     def __recv_bytes(self) -> int:
         data = self.client.recv(self.buf_size)

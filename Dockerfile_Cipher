@@ -1,0 +1,17 @@
+FROM python:3.12
+LABEL authors="timat"
+ENV PYTHONUNBUFFERED 1
+
+RUN apt-get update && apt-get install -y
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ciphers_algorithms ./ciphers_algorithms
+COPY ciphers_server.py .
+COPY .env .
+
+CMD ["python", "ciphers_server.py"]

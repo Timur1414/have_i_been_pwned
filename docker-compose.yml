@@ -1,0 +1,26 @@
+services:
+  have_i_been_pwned:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - cipher_server
+    networks:
+      - cipher_network
+
+  cipher_server:
+    build:
+      context: .
+      dockerfile: Dockerfile_Cipher
+    ports:
+      - "8888:8888"
+    env_file:
+      - .env
+    networks:
+      - cipher_network
+
+networks:
+  cipher_network:
+    driver: bridge

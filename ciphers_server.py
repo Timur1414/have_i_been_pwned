@@ -1,8 +1,11 @@
+import os
 import pickle
 import socket
+from time import sleep
+
+from dotenv import load_dotenv
 from ciphers_algorithms.aes import AES
 from ciphers_algorithms.rsa import RSA
-from have_i_been_pwned.settings import server_host, server_port, buf_size
 
 
 class Server:
@@ -23,6 +26,7 @@ class Server:
 
     def accept(self):
         self.connection, self.address = self.server.accept()
+        self.__handshake()
 
 
     def __handshake(self):
@@ -30,10 +34,9 @@ class Server:
         self.client_open_key = pickle.loads(client_open_key)
 
         serialized_open_key = pickle.dumps(self.open_key)
-        self.connection.send(serialized_open_key)
+        self.connection.send((serialized_open_key))
 
     def get_message(self) -> str:
-        self.__handshake()
         message = self.__recv_bytes()
         number_key = RSA.decrypt(message, self.close_key)
         bytes_key = number_key.to_bytes((number_key.bit_length() + 7) // 8, 'big')
@@ -59,11 +62,13 @@ class Server:
         number_initialize_vector = int.from_bytes(bytes_initialize_vector, 'big')
         encrypted_key = str(RSA.encrypt(number_key, self.client_open_key))
         self.connection.send(encrypted_key.encode('utf-8'))
+        sleep(1)
         encrypted_initialize_vector = str(RSA.encrypt(number_initialize_vector, self.client_open_key))
         self.connection.send(encrypted_initialize_vector.encode('utf-8'))
-
+        sleep(1)
         encrypted_message = AES.encrypt_message(message, key, initialize_vector)
         self.connection.send(encrypted_message.encode('utf-8'))
+        sleep(1)
 
     def close_connection(self):
         self.connection.close()
@@ -81,6 +86,10 @@ class Server:
 
 
 def main():
+    load_dotenv()
+    server_host = '0.0.0.0'
+    server_port = int(os.environ.get('CIPHER_SERVER_PORT', 'Define me!'))
+    buf_size = 1024
     server = Server(host=server_host, port=server_port, buf_size=buf_size)
     server.generate_keys()
     end = False

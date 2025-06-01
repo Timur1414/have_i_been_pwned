@@ -18,6 +18,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'delete_files': {
         'task': 'cipher.tasks.delete_files',
-        'schedule': 30,  # Every 30 seconds
+        'schedule': 86400,  # Every 86400 seconds (1 day)
     },
 }
