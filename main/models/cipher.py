@@ -3,8 +3,6 @@ This file contains the models for the application.
 """
 from __future__ import annotations
 import logging
-from typing import Optional
-from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
