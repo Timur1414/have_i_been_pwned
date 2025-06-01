@@ -10,26 +10,29 @@ from main.forms import CipherForm
 
 logger = logging.getLogger('custom_django')
 
-def send_message_to_server(data: str, action: str) -> str:
+def send_message_to_server(data: str, key: str, action: str, client: Client) -> str:
     try:
-        client = Client(host=server_host, port=server_port, buf_size=buf_size)
-        client.connect()
-        client.generate_keys()
-        client.send_message(f'{action} {data}')
+        client.send_message(f'{action} {key} {data}')
         result = client.get_message()
-        client.close()
         return result
-    except (ValueError, IndexError):
+    except (ValueError, IndexError, EOFError):
         return ''
+    except ConnectionRefusedError:
+        return 'Server is not responding'
 
-def get_result_from_cipher_server(data: str, action: str) -> str:
+def get_result_from_cipher_server(data: str, key: str, action: str) -> str:
+    client = Client(host=server_host, port=server_port, buf_size=buf_size)
+    client.generate_keys()
+    client.connect()
     result = ''
     counter = 0
     while result == '':
-        result = send_message_to_server(data, action)
+        result = send_message_to_server(data, key, action, client)
         counter += 1
         if counter > 10:
+            client.close()
             return 'Server is not responding'
+    client.close()
     return result
 
 def cipher(request):
@@ -40,12 +43,13 @@ def cipher(request):
     context = {
         'title': 'Cipher Result',
     }
-    form = CipherForm(request.POST)
+    form = CipherForm(request.POST, request.FILES)
     if form.is_valid():
         action = form.cleaned_data['action']
-        data = form.cleaned_data['data']
+        data = form.cleaned_data['data'].read()
+        key = form.cleaned_data['key']
         context['action'] = action
-        result = get_result_from_cipher_server(data, action)
+        result = get_result_from_cipher_server(data.decode(), key, action)
         context['result'] = result
     else:
         logger.warning('User %s send wrong data to cipher page', request.user.username)

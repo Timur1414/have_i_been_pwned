@@ -6,7 +6,7 @@
             {% for field, errors in form.errors.items %}
                 <li>
                     {% for error in errors %}
-                        {{ error }}
+                        {{ field }}: {{ error }}
                     {% endfor %}
                 </li>
             {% endfor %}
@@ -20,6 +20,7 @@
         <div>
             <p>Data:</p>
             <p>{{ result }}</p>
+            <p>Файл автоматически удалится через ...</p>
         </div>
     {% endif %}
 {% endblock %}

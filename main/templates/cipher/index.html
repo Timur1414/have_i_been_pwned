@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Cipher</h1>
-    <form method="post" action="{% url 'cipher_logic' %}">
+    <form method="post" action="{% url 'cipher_logic' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Send">
