@@ -181,6 +181,7 @@ server_port = int(os.environ.get('CIPHER_SERVER_PORT', 'Define me!'))
 buf_size = 1024
 
 # Celery and redis settings
-REDIS_HOST = BASE_URL.replace(':8000', '').replace('http://', '')
+REDIS_HOST = 'redis' # Use 'redis' if running in Docker, or 'localhost' if running locally
 REDIS_PORT = '6379'
 CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'

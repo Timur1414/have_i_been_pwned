@@ -1,4 +1,9 @@
 services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
   have_i_been_pwned:
     build: .
     ports:
@@ -9,6 +14,9 @@ services:
       - cipher_server
     networks:
       - cipher_network
+    volumes:
+      - ./media:/have_i_been_pwned/media
+      - ./db.sqlite3:/have_i_been_pwned/db.sqlite3
 
   cipher_server:
     build:
@@ -20,6 +28,27 @@ services:
       - .env
     networks:
       - cipher_network
+
+  celery_beat:
+    build: .
+    command: ["celery", "-A", "have_i_been_pwned", "beat", "-l", "info"]
+    depends_on:
+      - redis
+      - have_i_been_pwned
+    volumes:
+      - ./media:/have_i_been_pwned/media
+      - ./db.sqlite3:/have_i_been_pwned/db.sqlite3
+
+  celery_worker:
+    build: .
+    command: ["celery", "-A", "have_i_been_pwned", "worker", "-l", "info", "--pool=solo"]
+    depends_on:
+      - redis
+      - have_i_been_pwned
+      - celery_beat
+    volumes:
+      - ./media:/have_i_been_pwned/media
+      - ./db.sqlite3:/have_i_been_pwned/db.sqlite3
 
 networks:
   cipher_network:
