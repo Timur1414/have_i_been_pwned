@@ -17,7 +17,9 @@ COPY main ./main
 COPY media ./media
 COPY .env .
 COPY manage.py .
-COPY db.sqlite3 .
+COPY data.json .
 
 RUN python manage.py migrate
+RUN python manage.py loaddata data.json
+
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
