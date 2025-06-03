@@ -5,7 +5,7 @@ import datetime
 import logging
 import hashlib
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import Http404
+from django.http import Http404, FileResponse
 from django.shortcuts import render
 from cipher.client import Client
 from have_i_been_pwned.settings import server_host, server_port, buf_size, MEDIA_ROOT
@@ -13,6 +13,14 @@ from main.forms import CipherForm
 from main.models import CipherResults
 
 logger = logging.getLogger('custom_django')
+
+def download(request, id):
+    obj = CipherResults.objects.get(id=id)
+    if obj.author != request.user:
+        raise Http404
+    filename = obj.file.path
+    response = FileResponse(open(filename, 'rb'))
+    return response
 
 def send_message_to_server(data: str, key: str, action: str) -> str:
     try:
@@ -33,8 +41,9 @@ def save_result(result: str, request: WSGIRequest):
     file_path = f'{MEDIA_ROOT}/{file_name}.txt'
     with open(file_path, 'w') as file:
         file.write(result)
-    result_object = CipherResults(file=file_path)
+    result_object = CipherResults(file=file_path, author=request.user)
     result_object.save()
+    return result_object
 
 def get_result_from_cipher_server(data: str, key: str, action: str) -> str:
     result = ''
@@ -59,7 +68,8 @@ def cipher(request):
         key = form.cleaned_data['key']
         context['action'] = action
         result = get_result_from_cipher_server(data.decode(), key, action)
-        save_result(result, request)
+        created_obj = save_result(result, request)
+        context['file_id'] = created_obj.id
         context['result'] = result
     else:
         logger.warning('User %s send wrong data to cipher page', request.user.username)

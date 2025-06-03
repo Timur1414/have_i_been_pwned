@@ -20,7 +20,8 @@
         <div>
             <p>Data:</p>
             <p>{{ result }}</p>
-            <p>Файл автоматически удалится через ...</p>
+            <p>Файл автоматически удалится через 1 день.</p>
+            <a href="{% url 'download_result' id=file_id %}" download>Download result</a>
         </div>
     {% endif %}
 {% endblock %}

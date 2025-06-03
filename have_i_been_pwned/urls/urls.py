@@ -4,6 +4,7 @@ URL configuration for the Have I Been Pwned project.
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from cipher.views import download
 from main import views
 
 urlpatterns = [
@@ -36,4 +37,5 @@ urlpatterns = [
     path('create/account', views.AccountCreatePage.as_view(), name='create_account'),
 
     path('cipher/', views.CipherPage.as_view(), name='cipher'),
+    path('cipher/download_result/<int:id>', download, name='download_result'),
 ]
