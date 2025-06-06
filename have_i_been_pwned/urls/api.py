@@ -13,5 +13,6 @@ urlpatterns = [
     path('password_data/', routers.PasswordDataViewSet.as_view()),
     path('phone_data/', routers.PhoneDataViewSet.as_view()),
 
-    path('cipher_logic/', cipher_views.cipher, name='cipher_logic'),
+    path('cipher_logic/', cipher_views.CipherPage.as_view(), name='cipher_logic'),
+    # path('cipher_logic/', cipher_views.cipher, name='cipher_logic'),
 ]
