@@ -15,6 +15,9 @@ from main.models import CipherResults
 logger = logging.getLogger('custom_django')
 
 def download(request, id):
+    """
+    This view handles the download of cipher results (txt file).
+    """
     obj = CipherResults.objects.get(id=id)
     if obj.author != request.user:
         raise Http404

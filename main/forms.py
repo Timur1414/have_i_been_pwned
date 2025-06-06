@@ -83,7 +83,6 @@ class CipherForm(forms.Form):
         ('encode', 'Encode'),
         ('decode', 'Decode'),
     ]
-    # data = forms.CharField(max_length=16, widget=forms.TextInput(attrs={'class': 'form-control'}), label='Data')
     data = forms.FileField(widget=forms.FileInput(attrs={'class': 'form-control'}), label='Text', validators=[validate_file_extension])
     key = forms.CharField(max_length=16, widget=forms.TextInput(attrs={'class': 'form-control'}), label='Key')
     action = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class': 'form-control'}), label='Action')

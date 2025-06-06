@@ -1,14 +1,19 @@
+"""
+Модуль отдельного проложения, которое принимает запросы через socket, шифрует текст и отдаёт обратно.
+"""
 import os
 import pickle
 import socket
 from time import sleep
-
 from dotenv import load_dotenv
 from ciphers_algorithms.aes import AES
 from ciphers_algorithms.rsa import RSA
 
 
 class Server:
+    """
+    Server class that handles socket connections, key generation, and message encryption/decryption.
+    """
     def __init__(self, host: str = '127.0.0.1', port: int = 8888, buf_size: int = 1024):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.host = host
@@ -25,18 +30,27 @@ class Server:
         self.client_open_key = None
 
     def accept(self):
+        """
+        Accepts a connection from a client and performs a handshake to exchange keys.
+        """
         self.connection, self.address = self.server.accept()
         self.__handshake()
 
 
     def __handshake(self):
+        """
+        This method performs a handshake with the client to exchange public keys.
+        """
         client_open_key = self.connection.recv(self.buf_size)
         self.client_open_key = pickle.loads(client_open_key)
 
         serialized_open_key = pickle.dumps(self.open_key)
-        self.connection.send((serialized_open_key))
+        self.connection.send(serialized_open_key)
 
     def get_message(self) -> str:
+        """
+        This method receives a messages (key, initial vector and data) from the client, decrypts it using RSA and AES.
+        """
         message = self.__recv_bytes()
         number_key = RSA.decrypt(message, self.close_key)
         bytes_key = number_key.to_bytes((number_key.bit_length() + 7) // 8, 'big')
@@ -54,6 +68,9 @@ class Server:
         return decrypted_message
 
     def send_message(self, message: str):
+        """
+        This method encrypts the message using AES and RSA, then sends it to the client.
+        """
         key = AES.generate_key()
         bytes_key = key.encode('utf-8')
         number_key = int.from_bytes(bytes_key, 'big')
@@ -71,15 +88,27 @@ class Server:
         sleep(1)
 
     def close_connection(self):
+        """
+        This method closes the connection with the client.
+        """
         self.connection.close()
 
     def close_server(self):
+        """
+        This method closes the server socket.
+        """
         self.server.close()
 
     def generate_keys(self):
+        """
+        This method generates a pair of RSA keys (public and private) for the server.
+        """
         self.open_key, self.close_key = RSA.generate_keys()
 
     def __recv_bytes(self) -> int:
+        """
+        This method receives bytes from the client and decodes them to an integer.
+        """
         data = self.connection.recv(self.buf_size)
         message = int(data.decode('utf-8'))
         return message

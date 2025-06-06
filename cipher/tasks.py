@@ -1,3 +1,6 @@
+"""
+This module contains tasks related to the cipher application.
+"""
 from django.utils import timezone
 from have_i_been_pwned.celery import app
 from main.models import CipherResults
